@@ -20,8 +20,21 @@ class TodosCreateView(generics.CreateAPIView):
     queryset=Todo.objects.all()
     serializer_class = TodosSerializer
 
+
+
+
+@api_view(['GET'])
+def taskDetail(request, pk):
+	tasks = Todo.objects.get(id=pk)
+	serializer = TodosSerializer(tasks, many=False)
+	return Response(serializer.data)
+
+
+
+
+
 # Updating tasks
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'PATCH'])
 def TaskUpdate(request, pk):
     try:
         model = Todo.objects.get(id=pk)
@@ -32,12 +45,12 @@ def TaskUpdate(request, pk):
         serializer = TodosSerializer(instance=model)
         return Response(serializer.data)
 
-    if request.method == 'PUT':
+    if request.method == 'PATCH':
 
         serializer = TodosSerializer(model, request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response('Successful Updated')
+            return Response(request.data)
 
         else:
             return Response('Failed')
