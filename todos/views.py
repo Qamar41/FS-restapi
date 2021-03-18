@@ -5,19 +5,22 @@ from .models import Todo
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics
-
-
+from .services import TodosListView ,updatelogic,deletelogic
+from .datalayer import alldata
 
 def home(request):
     return render (request, 'index.html' )
 
-# List of all the tasks
+
+
+# # List of all the tasks
 class TodosListView(ListCreateAPIView):
-    queryset=Todo.objects.all()
+    queryset=alldata()   #alldata() is coming from datalayer.py
     serializer_class = TodosSerializer
 
+
+
 class TodosCreateView(generics.CreateAPIView):
-    queryset=Todo.objects.all()
     serializer_class = TodosSerializer
 
 
@@ -25,7 +28,7 @@ class TodosCreateView(generics.CreateAPIView):
 
 @api_view(['GET'])
 def taskDetail(request, pk):
-	tasks = Todo.objects.get(id=pk)
+	tasks = taskdetails(pk)
 	serializer = TodosSerializer(tasks, many=False)
 	return Response(serializer.data)
 
@@ -36,38 +39,14 @@ def taskDetail(request, pk):
 # Updating tasks
 @api_view(['GET', 'PATCH'])
 def TaskUpdate(request, pk):
-    try:
-        model = Todo.objects.get(id=pk)
-    except:
-        return Response('Not Found')
-
-    if request.method == 'GET':
-        serializer = TodosSerializer(instance=model)
-        return Response(serializer.data)
-
-    if request.method == 'PATCH':
-
-        serializer = TodosSerializer(model, request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(request.data)
-
-        else:
-            return Response('Failed')
+    updating=updatelogic(request,pk)
+    return Response(updating.data)
+    
+  
 
 
 # Deleting Task
 @api_view(['GET', 'DELETE'])
 def TaskDelete(request, pk):
-    try:
-        model = Todo.objects.get(id=pk)
-    except:
-        return Response('Not Found')
-
-    if request.method == 'GET':
-        serializer = TodosSerializer(instance=model)
-        return Response(serializer.data)
-
-    if request.method == 'DELETE':
-        model.delete()
-        return Response('Deleted')
+    x=deletelogic(request,pk)
+    return Response(x.data)

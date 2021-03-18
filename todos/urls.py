@@ -6,6 +6,7 @@ urlpatterns = [
     path('',views.home ),
     #for list of All Tasks
     path('api/tasks', TodosListView.as_view()),
+    # path('api/tasks', views.TodosListView),
     path('api/create-task', TodosCreateView.as_view()),
     #get a single task detail
 
