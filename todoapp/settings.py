@@ -25,7 +25,7 @@ SECRET_KEY = '@bqnw8m-_ue=@t39deqlm#6tk79*z8&on#bgqc4(lyi-7s)%w^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['6bef586f2de2.ngrok.io', '127.0.0.1']
+ALLOWED_HOSTS = ['*','5f7c073e6ec1.ngrok.io']
 
 
 # Application definition
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'todos',
     'rest_framework',
     'corsheaders',
+    'app2',
+    'app3',
 ]
 
 MIDDLEWARE = [
@@ -77,13 +79,38 @@ WSGI_APPLICATION = 'todoapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
+
+DATABASE_ROUTERS = ['todos.router.CheckerRouter']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
-
+    },
+    'app2db': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'app2',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    },
+    'app3db': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'app3',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    },
 }
+
+
+
+
+
+
 
 
 # Password validation
@@ -131,15 +158,15 @@ STATIC_URL = '/static/'
 
 
 #configureing coreheaders only for  locally
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
- 'http://localhost:8000',
- 
-#  'http://2ab2323f25da.ngrok.io',
- 
-
-
-)
+# CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_WHITELIST = (
+#  'http://localhost:8000',
+#
+# #  'http://2ab2323f25da.ngrok.io',
+#
+#
+#
+# )
 
 # want to allow access for all domains
 
